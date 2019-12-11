@@ -1,0 +1,35 @@
+import csv
+a = []
+print("\n The Given Training Data Set \n")
+
+with open('t.csv', 'r') as csvFile:
+    reader = csv.reader(csvFile)
+    for row in reader:
+        a.append (row)
+        print(row)
+
+specific =a[0][:-1]
+general = []
+num_attributes = len(a[0]) 
+
+print("\n The initial value of hypothesis: ")
+S = ['0'] * num_attributes
+G = ['?'] * num_attributes
+print ("\n The most specific hypothesis  : [0,0,0,0,0,0]\n")
+print (" \n The most general hypothesis  : [?,?,?,?,?,?]\n")
+for row in a:
+    if row[-1] == 'yes':
+        for i in range(len(specific)):
+            if row[i] != specific[i]:
+                specific[i] = '?'
+                for attribute in general:
+                    general.remove(attribute) if attribute[i] != '?' else None
+    else:
+        for i in range(len(specific)):
+            if specific[i] != '?' and row[i] != specific[i]:
+                vector = ['?'] * len(specific)
+                vector[i] = specific[i]
+                general.append(vector) if vector not in general else None
+
+    print("General hypothesis: ", (['?'] * len(specific)) if len(general) == 0 else general)
+    print("Specific hypothesis: ", specific, "\n")
